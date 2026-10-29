@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Little Question for You 💗</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 25px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #ffe0ec, #fff0f5, #ffd6e7);
+      color: #71394f;
+      overflow-x: hidden;
+    }
+
+    .card {
+      width: min(92%, 450px);
+      padding: 32px 23px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.94);
+      border: 2px solid white;
+      border-radius: 28px;
+      box-shadow: 0 15px 50px rgba(219, 91, 139, 0.2);
+      z-index: 2;
+    }
+
+    .emoji {
+      font-size: 72px;
+      margin: 10px 0;
+      animation: bounce 2s infinite;
+    }
+
+    h1 {
+      font-size: 30px;
+      margin: 10px 0;
+      color: #e75480;
+    }
+
+    h2 {
+      color: #e75480;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 30px;
+      min-height: 70px;
+    }
+
+    button {
+      border: none;
+      border-radius: 50px;
+      padding: 14px 23px;
+      font-size: 16px;
+      font-weight: bold;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    #yesBtn {
+      background: #ff5c93;
+      color: white;
+      box-shadow: 0 5px 15px #ffb0cb;
+      position: relative;
+      z-index: 3;
+    }
+
+    #noBtn {
+      background: #f1edf0;
+      color: #8b6575;
+    }
+
+    .hint {
+      color: #b98b9d;
+      font-size: 13px;
+      margin-top: 25px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    #dateForm {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 25px;
+      text-align: left;
+    }
+
+    #dateForm label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #b84770;
+      margin-top: 5px;
+    }
+
+    #dateForm input,
+    #dateForm textarea,
+    #dateForm select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #f3bfd1;
+      border-radius: 12px;
+      background: #fff8fb;
+      color: #71394f;
+      font: inherit;
+      font-size: 16px;
+    }
+
+    #dateForm input:focus,
+    #dateForm textarea:focus,
+    #dateForm select:focus {
+      outline: 2px solid #ff8bb2;
+    }
+
+    #dateForm button,
+    #planResult button {
+      background: #ff5c93;
+      color: white;
+      margin-top: 12px;
+      box-shadow: 0 5px 15px #ffb0cb;
+    }
+
+    #planResult {
+      margin-top: 25px;
+      padding: 18px;
+      background: #fff0f6;
+      border-radius: 18px;
+      overflow-wrap: anywhere;
+    }
+
+    #planSummary {
+      white-space: pre-line;
+      text-align: left;
+    }
+
+    .confetti {
+      position: fixed;
+      top: -35px;
+      z-index: 10;
+      pointer-events: none;
+      animation: fall linear forwards;
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -40px;
+      pointer-events: none;
+      animation: floatUp linear forwards;
+      z-index: 1;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-9px); }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes floatUp {
+      to {
+        transform: translateY(-110vh) rotate(30deg);
+        opacity: 0;
+      }
+    }
+
+    .successEmoji {
+      animation: heartbeat 0.8s infinite;
+    }
+
+    @media (max-width: 400px) {
+      h1 { font-size: 26px; }
+      .card { padding: 26px 17px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card" id="card">
+
+    <!-- THE INVITATION -->
+    <section id="question">
+      <div class="emoji" id="mainEmoji">🥹💗</div>
+
+      <h1>HI MAAM ZEA 💕</h1>
+
+      <p>I have a little question to ask you...</p>
+      <p>Would you like to go on a date with me? 🌷</p>
+
+      <div class="buttons">
+        <button id="yesBtn" type="button">Yes! 💖</button>
+        <button id="noBtn" type="button">No 🙈</button>
+      </div>
+
+      <p class="hint" id="hint">I hope you'll say yes 🥺</p>
+    </section>
+
+    <!-- THE CELEBRATION AND DATE PLANNER -->
+    <section id="success" class="hidden">
+      <div class="emoji successEmoji">🥰💐💗</div>
+
+      <h1>YAYYYYY!! 💖</h1>
+
+      <p>You just made me the happiest person ever! 🥹💕</p>
+      <p>Now, let's plan our little date! 🌷</p>
+
+      <form id="dateForm">
+        <label for="date">📅 What day works for you?</label>
+        <input type="date" id="date" required>
+
+        <label for="time">⏰ What time shall we meet?</label>
+        <input type="time" id="time" required>
+
+        <label for="placeType">📍 What would you like to do?</label>
+        <select id="placeType">
+          <option value="Café">☕ Go to a café</option>
+          <option value="Restaurant">🍝 Eat at a restaurant</option>
+          <option value="Mall">🛍️ Go to the mall</option>
+          <option value="Movie date">🎬 Watch a movie</option>
+          <option value="Walk together">🌅 Take a walk together</option>
+          <option value="Surprise me">🎁 Surprise me!</option>
+          <option value="Other">💗 Something else</option>
+        </select>
+
+        <label for="place">📌 Any specific place in mind?</label>
+        <input
+          type="text"
+          id="place"
+          placeholder="Restaurant name, café, or location..."
+        >
+
+        <label for="notes">💌 Anything else you'd like?</label>
+        <textarea
+          id="notes"
+          placeholder="Food you want, things to do, or anything else..."
+          rows="3"
+        ></textarea>
+
+        <button type="submit" id="confirmBtn">
+          Confirm our date 💗
+        </button>
+      </form>
+
+      <div id="planResult" class="hidden">
+        <h2>Our little date plan! 🥰</h2>
+        <p id="planSummary"></p>
+
+        <button type="button" id="copyBtn">
+          Copy our date plan 💌
+        </button>
+
+        <button type="button" id="shareBtn">
+          Send our plan 💕
+        </button>
+
+        <p class="hint">
+          I can't wait to spend time with you! ❤️
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const hint = document.getElementById("hint");
+    const mainEmoji = document.getElementById("mainEmoji");
+    const question = document.getElementById("question");
+    const success = document.getElementById("success");
+    const dateInput = document.getElementById("date");
+    const dateForm = document.getElementById("dateForm");
+    const planResult = document.getElementById("planResult");
+
+    let yesScale = 1;
+    let noClicks = 0;
+    let chosenDatePlan = "";
+
+    // Don't allow dates in the past.
+    function setMinimumDate() {
+      const now = new Date();
+
+      const localToday = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0")
+      ].join("-");
+
+      dateInput.min = localToday;
+    }
+
+    setMinimumDate();
+
+    // The NO button makes YES grow.
+    const hints = [
+      "Are you sure? 🥺",
+      "Pretty please? 🥹💗",
+      "I'll bring you something sweet! 🍫",
+      "Just one little date? 🌷",
+      "Look how big the YES button is getting! 😂",
+      "My heart is waiting for you! 💓",
+      "One more chance? 🐻💕"
+    ];
+
+    noBtn.addEventListener("click", function () {
+      noClicks++;
+
+      yesScale = Math.min(yesScale + 0.25, 3.5);
+      yesBtn.style.transform = `scale(${yesScale})`;
+
+      hint.textContent =
+        hints[Math.min(noClicks - 1, hints.length - 1)];
+
+      mainEmoji.textContent =
+        noClicks >= 4 ? "🥹👉👈" : "🥺💞";
+    });
+
+    // YES reveals the celebration and date planner.
+    yesBtn.addEventListener("click", function () {
+      question.classList.add("hidden");
+      success.classList.remove("hidden");
+
+      launchConfetti();
+      launchHearts();
+
+      setMinimumDate();
+    });
+
+    function launchConfetti() {
+      const pieces = [
+        "💖", "💕", "💗", "❤️",
+        "🌸", "✨", "🎉", "💐"
+      ];
+
+      for (let i = 0; i < 75; i++) {
+        const piece = document.createElement("div");
+
+        piece.className = "confetti";
+        piece.textContent =
+          pieces[Math.floor(Math.random() * pieces.length)];
+
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.fontSize = (16 + Math.random() * 20) + "px";
+        piece.style.animationDuration = (2 + Math.random() * 3) + "s";
+        piece.style.animationDelay = Math.random() + "s";
+
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 6500);
+      }
+    }
+
+    function launchHearts() {
+      for (let i = 0; i < 18; i++) {
+        const heart = document.createElement("div");
+
+        heart.className = "heart";
+        heart.textContent =
+          ["💗", "💕", "❤️", "💖"][Math.floor(Math.random() * 4)];
+
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (20 + Math.random() * 25) + "px";
+        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+        heart.style.animationDelay = Math.random() * 2 + "s";
+
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 8500);
+      }
+    }
+
+    // Build the date plan.
+    dateForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const date = dateInput.value;
+      const time = document.getElementById("time").value;
+      const placeType = document.getElementById("placeType").value;
+      const place = document.getElementById("place").value.trim();
+      const notes = document.getElementById("notes").value.trim();
+
+      if (!date || !time) {
+        alert("Please choose your date and time first! 💗");
+        return;
+      }
+
+      // Validate the date again in case it was entered manually.
+      setMinimumDate();
+
+      if (date < dateInput.min) {
+        alert("Please choose today or a future date! 🌷");
+        return;
+      }
+
+      const formattedDate = new Date(date + "T12:00:00")
+        .toLocaleDateString("en-PH", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        });
+
+      const formattedTime = new Date("2000-01-01T" + time)
+        .toLocaleTimeString("en-PH", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true
+        });
+
+      chosenDatePlan =
+        "💕 OUR LITTLE DATE PLAN 💕\n\n" +
+        "📅 Date: " + formattedDate + "\n" +
+        "⏰ Time: " + formattedTime + "\n" +
+        "💗 Activity: " + placeType +
+        (place ? "\n📍 Place: " + place : "\n📍 Place: To be decided") +
+        (notes ? "\n💌 Extra wishes: " + notes : "") +
+        "\n\nCan't wait for our date! 🥹❤️";
+
+      document.getElementById("planSummary").textContent =
+        chosenDatePlan;
+
+      planResult.classList.remove("hidden");
+
+      document.getElementById("confirmBtn").textContent =
+        "Update my choices 💗";
+
+      planResult.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
+    });
+
+    // Copy the plan to the clipboard.
+    async function copyPlan() {
+      if (!chosenDatePlan) return;
+
+      try {
+        await navigator.clipboard.writeText(chosenDatePlan);
+        alert("Date plan copied! 💗 Send it to him!");
+      } catch (error) {
+        window.prompt("Copy your date plan below:", chosenDatePlan);
+      }
+    }
+
+    document.getElementById("copyBtn").addEventListener("click", copyPlan);
+
+    // Share the plan using supported phone/browser share options.
+    document.getElementById("shareBtn").addEventListener("click", async function () {
+      if (!chosenDatePlan) {
+        alert("Please confirm your date plan first! 💗");
+        return;
+      }
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Our Little Date Plan 💕",
+            text: chosenDatePlan
+          });
+        } catch (error) {
+          if (error.name !== "AbortError") {
+            await copyPlan();
+          }
+        }
+      } else {
+        await copyPlan();
+      }
+    });
+  </script>
+</body>
+</html>
